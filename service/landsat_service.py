@@ -10,7 +10,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-USER ='ivipnascimento@hotmail.com'
+USER = os.getenv('USERNAME')
 PASSWORD = os.getenv('PASSWORD')
 
 api = API(username=USER, password=PASSWORD)
