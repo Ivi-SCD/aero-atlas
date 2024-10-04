@@ -1,0 +1,113 @@
+body {
+    font-family: Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #ffffff;
+    font-size: 0.875em;
+}
+
+header {
+    background-color: #4a148c;
+    padding: 0.625em 1.25em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+nav {
+    display: flex;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 1.25em;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+#principal {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 1.25em;
+}
+
+#map {
+    height: 100vh;
+    width: 100%;
+    border: 0.125em solid #4a148c;
+}
+
+#form-container {
+    background-color: #1e1e1e;
+    padding: 1.25em;
+    border-radius: 0.3125em;
+    width: auto;
+    margin: 1.25em;
+    box-shadow: 0 0.125em 0.625em rgba(0, 0, 0, 0.5);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 0.3125em;
+}
+
+input, select, button {
+    margin-bottom: 0.9375em;
+    padding: 0.625em;
+    border: 0.125em solid #4a148c;
+    border-radius: 0.3125em;
+}
+
+button {
+    background-color: #4a148c;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #6a1b9a;
+}
+
+#ndvi, #evi, #brightness-temp, #ndwi {
+    margin-top: 1.25em;
+    padding: 1.25em;
+    background-color: #1e1e1e;
+    border-radius: 1em;
+    box-shadow: 0 0.125em 0.625em rgba(0, 0, 0, 0.5);
+}
+
+#ndvi img, #evi img, #brightness-temp img, #ndwi img {
+    max-width: 100%;
+    border: 0.125em solid #4a148c;
+    border-radius: 0.3125em;
+}
+
+#loading-indicator {
+    display: none;
+    position: fixed;
+    top: 1.25em;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0.625em;
+    border: 0.0625em solid #ccc;
+    border-radius: 0.3125em;
+    z-index: 1000;
+}

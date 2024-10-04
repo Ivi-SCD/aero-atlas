@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Landsat</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Mapa Landsat</h1>
+        <nav>
+            <a href="#">Página Atual</a>
+            <a href="#">Análise Dados Landsat</a>
+        </nav>
+    </header>
+    
+    <div id="loading-indicator">Carregando...</div>    
+    <div id="principal">
+        <div id="map"></div>
+        <div id="form-container">
+            <form id="landsat-form">
+                <label for="landsat">Landsat:</label>
+                <select id="landsat" name="landsat">
+                    <option value="L9">Landsat 9</option>
+                    <option value="L8">Landsat 8</option>
+                    <option value="L7">Landsat 7</option>
+                    <option value="L5">Landsat 5</option>
+                </select>
+                <br>
+
+                <label for="level">Level:</label>
+                <select id="level" name="level">
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                </select>
+                <br>
+
+                <label for="lat">Latitude:</label>
+                <input type="number" id="lat" name="lat" step="any" required>
+                <br>
+
+                <label for="long">Longitude:</label>
+                <input type="number" id="long" name="long" step="any" required>
+                <br>
+
+                <label for="start_date">Data de Início:</label>
+                <input type="date" id="start_date" name="start_date">
+                <br>
+
+                <label for="end_date">Data de Fim:</label>
+                <input type="date" id="end_date" name="end_date" required>
+                <br>
+
+                <label for="cloud_cover">Cobertura de Nuvens (%):</label>
+                <input type="number" id="cloud_cover" name="cloud_cover" min="0" max="100">
+                <br>
+
+                <button type="submit">Buscar Cena</button>
+            </form>
+
+            <div id="scene-select"></div>
+        </div>
+    </div>
+    
+    <div id="ndvi"></div>
+    <div id="evi"></div>
+    <div id="brightness-temp"></div>
+    <div id="ndwi"></div>
+
+    <div id="graph-container"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>
