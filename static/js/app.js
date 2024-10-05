@@ -22,6 +22,23 @@ var baseMaps = {
     "Satélite": satelliteLayer
 };
 
+var categoryMaps = {
+    "Agriculture": [
+        'Normalized Difference Vegetation Index',
+        'Enhanced Vegetation Index',
+        'Soil Adjusted Vegetation Index'
+    ],
+    "Hidrology": [
+        'Normalized Difference Water Index',
+        'Modified Normalized Difference Water Index',
+        'Soil Adjusted Vegetation Index'
+    ],
+    "Temperature & Climate": [
+        'Land Surface Reflection',
+        'Brightness'
+    ],
+}
+
 L.control.layers(baseMaps).addTo(map);
 
 let currentMarker = null;
@@ -109,9 +126,9 @@ document.getElementById('landsat-form').onsubmit = function (e) {
 
             showLoadingIndicator("Baixando cena...");
 
-            downloadScene(selectedDisplayId);
             var corners = sceneMap[selectedDisplayId];
-            displaySceneArea(corners);
+            downloadScene(selectedDisplayId, corners);
+            //displaySceneArea(corners);
         };
 
 
@@ -146,9 +163,13 @@ function displaySceneArea(corners) {
             currentGrid.push(gridSquare);
         }
     }
+
+
+    L.imageOverlay('./static/graphs/teste.png', bounds).addTo(map)
+
 }
 
-function downloadScene(display_id) {
+function downloadScene(display_id, corners) {
     fetch('/download-scene/', {
         method: 'POST',
         headers: {
@@ -159,45 +180,66 @@ function downloadScene(display_id) {
     .then(response => response.json())
     .then(data => {
         hideLoadingIndicator();
-        console.log(data);
-        document.getElementById('ndvi').innerHTML = '';
-        document.getElementById('evi').innerHTML = '';
-        document.getElementById('brightness-temp').innerHTML = '';
-        document.getElementById('ndwi').innerHTML = '';
-
-        if (data.graphs.ndvi) {
-            const ndviImg = document.createElement('img');
-            ndviImg.src = data.graphs.ndvi;
-            ndviImg.alt = 'Gráfico de NDVI';
-            document.getElementById('ndvi').appendChild(ndviImg);
-        }
-
-        if (data.graphs.evi) {
-            const eviImg = document.createElement('img');
-            eviImg.src = data.graphs.evi;
-            eviImg.alt = 'Gráfico de EVI';
-            document.getElementById('evi').appendChild(eviImg);
-        }
-
-        if (data.graphs.brightness_temp) {
-            const brightnessTempImg = document.createElement('img');
-            brightnessTempImg.src = data.graphs.brightness_temp;
-            brightnessTempImg.alt = 'Gráfico de Temperatura de Brilho';
-            document.getElementById('brightness-temp').appendChild(brightnessTempImg);
-        }
-
-        if (data.graphs.ndwi) {
-            const ndwiImg = document.createElement('img');
-            ndwiImg.src = data.graphs.ndwi;
-            ndwiImg.alt = 'Gráfico de NDWI';
-            document.getElementById('ndwi').appendChild(ndwiImg);
-        }
+        displaySceneArea(corners)
     })
     .catch((error) => {
         hideLoadingIndicator();
         console.error('Erro:', error);
     });
 }
+
+function showAgricultureIndicators() {
+    const ndviIndicator = document.getElementById('ndvi')
+    const ndviCheckboxIndicator = document.getElementById('ndvi-checkbox')
+    
+    const eviIndicator = document.getElementById('evi')
+    const eviCheckboxIndicator = document.getElementById('evi-checkbox')
+    
+    const saviIndicator = document.getElementById('savi')
+    const saviCheckboxIndicator = document.getElementById('savi-checkbox')
+
+    ndviIndicator.style.visibility = 'visible'
+    ndviCheckboxIndicator.style.display = 'block'
+
+    eviIndicator.style.visibility = 'visible'
+    eviCheckboxIndicator.style.display = 'block'
+
+    saviIndicator.style.visibility = 'visible'
+    saviCheckboxIndicator.style.display = 'block'
+}
+
+function showHidrologyIndicators() {
+    const ndwiIndicator = document.getElementById('ndwi')
+    const ndwiCheckboxIndicator = document.getElementById('ndwi-checkbox')
+    
+    const mndwiIndicator = document.getElementById('mndwi')
+    const mndwiCheckboxIndicator = document.getElementById('mndwi-checkbox')
+
+    const aweiIndicator = document.getElementById('awei')
+    const aweiCheckboxIndicator = document.getElementById('awei-checkbox')
+
+
+    ndwiIndicator.style.visibility = 'visible'
+    ndwiCheckboxIndicator.style.display = 'block'
+
+    mndwiIndicator.style.visibility = 'visible'
+    mndwiCheckboxIndicator.style.display = 'block'
+
+    aweiIndicator.style.visibility = 'visible'
+    aweiCheckboxIndicator.style.display = 'block'
+
+}
+
+
+function showHidrologyIndicators() {
+    const lstIndicator = document.getElementById('lst')
+    const btiIndicator = document.getElementById('bti')
+
+    lstIndicator.style.display = 'visible'
+    btiIndicator.style.display = 'visible'
+}
+
+
 
 function showLoadingIndicator(message) {
     const loadingIndicator = document.getElementById('loading-indicator');

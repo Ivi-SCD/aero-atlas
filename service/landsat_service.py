@@ -1,6 +1,8 @@
 from landsatxplore.api import API
 from landsatxplore.earthexplorer import EarthExplorer
 import rasterio
+from rembg import remove
+from PIL import Image
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import pandas as pd
@@ -10,10 +12,10 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-USER = os.getenv('USERNAME')
+USERNAME = os.getenv('USERNAME_USGS')
 PASSWORD = os.getenv('PASSWORD')
 
-api = API(username=USER, password=PASSWORD)
+api = API(username=USERNAME, password=PASSWORD)
 
 
 def get_scenes(landsat, level, lat, long, end_date, start_date=None, cloud_cover=None, recent=False) -> list:
@@ -70,14 +72,13 @@ def calculate_and_plot_indices(display_id):
         
         plt.style.use('seaborn-v0_8-dark-palette')
         plt.figure(figsize=(5,5))
+        plt.axis('off')
         plt.imshow(ndvi, cmap='viridis', vmin=-1, vmax=1)
-        plt.colorbar(label='NDVI')
-        plt.title('NDVI (Normalized Difference Vegetation Index)', fontsize=16, fontweight='bold', color='navy')
-        plt.xlabel('Largura (pixels)', fontsize=12)
-        plt.ylabel('Altura (pixels)', fontsize=12)
-        plt.xticks(fontsize=10)
-        plt.yticks(fontsize=10)
         plt.savefig(f'static/graphs/{display_id}_ndvi.png')
+        img = Image.open(f'static/graphs/{display_id}_ndvi.png')
+        remove(img)
+        img.save(f'static/graphs/{display_id}_ndvi.png')
+        
         plt.close()
 
 
@@ -98,68 +99,24 @@ def calculate_and_plot_indices(display_id):
         evi = np.where(denominator <= 0, 0, 2.5 * ((nir_band - red_band) / denominator))
 
         plt.figure(figsize=(5,5))
-        plt.imshow(evi, cmap='Blues', vmin=-1, vmax=1)
-        plt.colorbar(label='EVI')
-        plt.title(f'EVI (Enhanced Vegetation Index)', fontsize=16, fontweight='bold', color='navy')
-        plt.xlabel('Largura (pixels)', fontsize=12)
-        plt.ylabel('Altura (pixels)', fontsize=12)
-        plt.xticks(fontsize=10)
-        plt.yticks(fontsize=10)
+        plt.imshow(evi, cmap='Blues')
+        plt.axis('off')
         plt.savefig(f'static/graphs/{display_id}_evi.png')
-        plt.close()
+        img = Image.open(f'static/graphs/{display_id}_evi.png')
+        img_no_bg = remove(img)
+        img_rotated = img_no_bg.rotate(12.5, expand=True)
+        img_rotated.save(f'static/graphs/{display_id}_evi.png')
 
-
-    with rasterio.open(f'{scene_path}/{display_id}_B10.TIF') as thermal_band:
-        thermal = thermal_band.read(1).astype('float32')
-
-
-        K1 = 774.89 
-        K2 = 1321.08
-        brightness_temp = K2 / np.log((K1 / thermal) + 1)
-
-        plt.figure(figsize=(5,5))
-        plt.imshow(brightness_temp, cmap='inferno')
-        plt.colorbar(label='Temperatura de Brilho (K)')
-        plt.title('Brightness Temperature', fontsize=16, fontweight='bold', color='navy')
-        plt.xlabel('Largura (pixels)', fontsize=12)
-        plt.ylabel('Altura (pixels)', fontsize=12)
-        plt.xticks(fontsize=10)
-        plt.yticks(fontsize=10)
-        plt.savefig(f'static/graphs/{display_id}_brightness_temp.png')
-        plt.close()
-
-
-    with rasterio.open(f'{scene_path}/{display_id}_B3.TIF') as green, \
-         rasterio.open(f'{scene_path}/{display_id}_B5.TIF') as nir:
-        
-        green_band = green.read(1).astype('float32')
-        nir_band = nir.read(1).astype('float32')
-
-
-        denominator = green_band + nir_band
-        ndwi = np.where(denominator == 0, 0, (green_band - nir_band) / denominator)
-
-        plt.figure(figsize=(5,5))
-        plt.imshow(ndwi, cmap='PuBu', vmin=-1, vmax=1)
-        plt.colorbar(label='NDWI (Normalized Difference Water Index)')
-        plt.title('NDWI', fontsize=16, fontweight='bold', color='navy')
-        plt.xlabel('Largura (pixels)', fontsize=12)
-        plt.ylabel('Altura (pixels)', fontsize=12)
-        plt.xticks(fontsize=10)
-        plt.yticks(fontsize=10)
-        plt.savefig(f'static/graphs/{display_id}_ndwi.png')
         plt.close()
 
 
     return {
         'ndvi': f'static/graphs/{display_id}_ndvi.png',
         'evi': f'static/graphs/{display_id}_evi.png',
-        'brightness_temp': f'static/graphs/{display_id}_brightness_temp.png',
-        'ndwi': f'static/graphs/{display_id}_ndwi.png'
     }
 
 def download_scene(display_id):
-    ee = EarthExplorer(USER, PASSWORD)
+    ee = EarthExplorer(USERNAME, PASSWORD)
 
     try:
         ee.download(display_id, output_dir='./data')

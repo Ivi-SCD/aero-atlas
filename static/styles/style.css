@@ -111,3 +111,12 @@ button:hover {
     border-radius: 0.3125em;
     z-index: 1000;
 }
+
+#savi-checkbox, #ndvi, #evi,
+#ndwi, #mndwi, #awei, #lsr, #bt, #savi,
+#ndwi-checkbox, #evi-checkbox,
+ #ndvi-checkbox, #mndwi-checkbox, #awei-checkbox, 
+ #lsr-checkbox, #bt-checkbox {
+    visibility: hidden;
+    display: none;
+}

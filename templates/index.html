@@ -31,7 +31,13 @@
                     <option value="L5">Landsat 5</option>
                 </select>
                 <br>
-
+                <label for="category-select">Category:</label>
+                <select id="category-select" name="category">
+                    <option value="All">All</option>
+                    <option value="Agriculture">Agriculture</option>
+                    <option value="Hidrology">Hidrology</option>
+                    <option value="Temperature & Climate">Temperature & Climate</option>
+                </select>
                 <label for="level">Level:</label>
                 <select id="level" name="level">
                     <option value="1">Level 1</option>
@@ -65,11 +71,74 @@
             <div id="scene-select"></div>
         </div>
     </div>
-    
-    <div id="ndvi"></div>
-    <div id="evi"></div>
-    <div id="brightness-temp"></div>
-    <div id="ndwi"></div>
+    <div>
+        <h1>Checkboxes</h1>
+
+        <div id="ndvi">
+            <label for="ndvi">
+                <input type="checkbox" id="ndvi-checkbox" name="ndvi-option" value="ndvi">
+                NDVI
+            </label>
+            <br>
+        </div>
+
+        <div id="evi">
+            <label for="evi">
+                <input type="checkbox" id="evi-checkbox" name="evi-option" value="evi">
+                EVI
+            </label>
+            <br>
+        </div>
+
+        <div id="savi">
+            <label for="savi">
+                <input type="checkbox" id="savi-checkbox" name="savi-option" value="savi">
+                SAVI
+            </label>
+            <br>
+        </div>
+
+        <div id="ndwi">
+            <label for="ndwi">
+                <input type="checkbox" id="ndwi-checkbox" name="ndwi-option" value="ndwi">
+                NDWI
+            </label>
+            <br>
+        </div>
+
+        <div id="mndwi">
+            <label for="mndwi">
+                <input type="checkbox" id="mndwi-checkbox" name="mndwi-option" value="mndwi">
+                MNDWI
+            </label>
+            <br>
+        </div>
+
+        <div id="awei">
+            <label for="awei">
+                <input type="checkbox" id="awei-checkbox" name="awei-option" value="awei">
+                AWEI
+            </label>
+            <br>
+        </div>
+
+        <div id="lsr">
+            <label for="lsr">
+                <input type="checkbox" id="lsr-checkbox" name="lsr-option" value="lsr">
+                LSR
+            </label>
+            <br>
+        </div>
+        
+        <div id="bt">
+            <label for="bt">
+                <input type="checkbox" id="bt-checkbox" name="bt-option" value="bt">
+                BT  
+            </label>
+        </div>
+        
+        <br>
+    </div>
 
     <div id="graph-container"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
