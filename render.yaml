@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: gunicorn app:App
-    env: python
-    buildCommand: ./build.sh
-    startCommand: gunicorn app:app
-    python_version: 3.9 
