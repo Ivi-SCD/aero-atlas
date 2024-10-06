@@ -201,34 +201,34 @@ function displayIndicator(indicator, imageUrl) {
 function updateIndexInfo(indicator) {
     const indexInfo = {
         ndvi: {
-            title: "NDVI (Índice de Vegetação por Diferença Normalizada)",
-            description: "O NDVI mede a saúde e densidade da vegetação. Varia de -1 a 1, onde valores mais altos indicam vegetação mais saudável e densa.",
-            interpretation: "• -1 a 0: Água, nuvens, neve ou superfícies não vegetadas\n• 0 a 0.2: Solo exposto ou vegetação muito esparsa\n• 0.2 a 0.4: Vegetação esparsa ou pouco saudável\n• 0.4 a 0.6: Vegetação moderadamente densa e saudável\n• 0.6 a 1: Vegetação muito densa e saudável"
+            title: "NDVI (Normalized Difference Vegetation Index)",
+            description: "NDVI shows how healthy and lush the plants are in your field.",
+            interpretation: "In the image, greener areas mean healthier plants. Dark green shows very healthy,<br>thick vegetation - like a lush, well-watered crop. Light green or yellow areas <br>might be less healthy plants or areas with less vegetation. <br>Red or brown areas could be bare soil or very unhealthy vegetation."
         },
         evi: {
-            title: "EVI (Índice de Vegetação Melhorado)",
-            description: "O EVI é uma versão aprimorada do NDVI, mais sensível em áreas de alta biomassa e menos influenciado por condições atmosféricas e do solo.",
-            interpretation: "• < 0: Água, nuvens, neve ou superfícies não vegetadas\n• 0 a 0.2: Solo exposto ou vegetação muito esparsa\n• 0.2 a 0.4: Vegetação esparsa\n• 0.4 a 0.6: Vegetação moderadamente densa\n• > 0.6: Vegetação muito densa"
+            title: "EVI (Enhanced Vegetation Index)",
+            description: "EVI is like a more detailed version of NDVI. It's better at showing differences in very leafy areas and isn't fooled as much by soil or haze.",
+            interpretation: "Similar to NDVI, darker green in the image means healthier, denser vegetation. <br>Lighter greens might be sparser or less healthy plants. <br>This index is especially good at showing small differences in very green areas, <br>like distinguishing between good and excellent crop health."
         },
         savi: {
-            title: "SAVI (Índice de Vegetação Ajustado ao Solo)",
-            description: "O SAVI é similar ao NDVI, mas reduz a influência do brilho do solo em áreas com vegetação esparsa.",
-            interpretation: "• < 0: Água, nuvens ou neve\n• 0 a 0.1: Solo exposto ou superfícies não vegetadas\n• 0.1 a 0.3: Vegetação esparsa\n• 0.3 a 0.5: Vegetação moderadamente densa\n• > 0.5: Vegetação densa"
+            title: "SAVI (Soil Adjusted Vegetation Index)",
+            description: "SAVI is helpful when you have areas with visible soil between plants. It's good for young crops or areas with spread-out plants.",
+            interpretation: "In the image, green still means healthy plants, but this index is better <br>at showing plant health in areas where you can see soil between the plants.<br>It's useful for seeing how well your crops are doing when<br>they're just starting to grow and haven't covered all the ground yet."
         },
         ndwi: {
-            title: "NDWI (Índice de Água por Diferença Normalizada)",
-            description: "O NDWI é usado para detectar corpos d'água e medir o conteúdo de água na vegetação.",
-            interpretation: "• < 0: Vegetação ou solo\n• 0 a 0.2: Vegetação úmida ou solo muito úmido\n• > 0.2: Corpos d'água abertos"
+            title: "NDWI (Normalized Difference Water Index)",
+            description: "NDWI helps you see where water is, both in ponds and in plants.",
+            interpretation: "Blue areas in the image show water - the darker the blue, the more likely <br>it's open water like a pond or river. <br>Light blue or green might mean very wet soil or plants with high water content.<br>Brown or red areas are drier, showing soil or vegetation with less water."
         },
         mndwi: {
-            title: "MNDWI (Índice de Água por Diferença Normalizada Modificado)",
-            description: "O MNDWI é uma versão melhorada do NDWI, mais eficaz na detecção de água em áreas urbanas.",
-            interpretation: "• < 0: Vegetação, solo ou áreas construídas\n• 0 a 0.2: Áreas mistas (possível presença de água)\n• > 0.2: Corpos d'água abertos"
+            title: "MNDWI (Modified Normalized Difference Water Index)",
+            description: "MNDWI is an improved water detector, especially good at finding water in areas with buildings or roads.",
+            interpretation: "Dark blue in the image strongly indicates water bodies like ponds, rivers, <br>or flooded areas. Light blue might be damp soil or areas with some water.<br>Other colors (green, brown, etc.) usually mean non-water areas like fields, <br>forests, or buildings."
         },
         awei: {
-            title: "AWEI (Índice de Extração de Água Automatizado)",
-            description: "O AWEI é projetado para separar efetivamente superfícies de água de outras superfícies terrestres em imagens de satélite.",
-            interpretation: "• < 0: Não-água (vegetação, solo, áreas urbanas)\n• > 0: Água (quanto maior o valor, maior a probabilidade de ser água)"
+            title: "AWEI (Automated Water Extraction Index)",
+            description: "AWEI is very good at telling the difference between water and everything else, even in tricky areas.",
+            interpretation: "In this image, blue shades show water. The darker and more intense the blue, <br>the more confident we are that it's water.<br>Other colors (greens, browns, etc.) are likely to be land. <br>This index is particularly good at spotting water even in areas where <br>it might be hard to see,like in shadows or near buildings."
         }
     };
 
@@ -236,7 +236,7 @@ function updateIndexInfo(indicator) {
     const infoHtml = `
         <h3>${info.title}</h3>
         <p>${info.description}</p>
-        <h4>Interpretação:</h4>
+        <h4>Interpretation:</h4>
         <pre>${info.interpretation}</pre>
     `;
     

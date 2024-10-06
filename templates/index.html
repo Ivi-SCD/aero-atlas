@@ -11,12 +11,12 @@
     <header>
         <h1>Mapa Landsat</h1>
         <nav>
-            <a href="#" id="home-link">Página Atual</a>
-            <a href="#" id="analysis-link">Análise de Dados</a>
+            <a href="#" id="home-link">Map</a>
+            <a href="#" id="analysis-link">Data Analytics</a>
         </nav>
     </header>
 
-    <div id="loading-indicator">Carregando...</div>
+    <div id="loading-indicator">Loading...</div>
 
     <div id="principal">
         <div id="map"></div>
@@ -59,10 +59,10 @@
                     <label for="end_date">Data de Fim:</label>
                     <input type="date" id="end_date" required>
 
-                    <label for="cloud_cover">Cobertura de Nuvens (%):</label>
+                    <label for="cloud_cover">Max Cloud Cover (%):</label>
                     <input type="number" id="cloud_cover" min="0" max="100">
 
-                    <button type="submit">Buscar Cena</button>
+                    <button type="submit">Search Scene</button>
                 </form>
             </div>
             <div id="scene-select"></div>
@@ -71,12 +71,12 @@
     </div>
 
     <div id="analysis-container" style="display: none;">
-        <h2>Análise de Dados</h2>
+        <h2>Data Analysis</h2>
         <!-- Content for data analysis will be added here -->
     </div>
 
     <div id="registration-container">
-        <h2>Cadastro para Receber Atualizações</h2>
+        <h2>Register for news and notifications about Landsat!</h2>
         <form id="registration-form">
             <label for="category-select">Category:</label>
             <select id="category-select" onchange="updateInfo()">
@@ -122,18 +122,18 @@
             <input type="email" id="email" required>
 
             <fieldset>
-                <legend>Preferências:</legend>
+                <legend>Preferences:</legend>
                 <input type="checkbox" id="all-updates" name="preferences" value="all">
-                <label for="all-updates">Todas as atualizações</label>
+                <label for="all-updates">All Updates</label>
 
                 <input type="checkbox" id="new-acquisitions" name="preferences" value="new">
-                <label for="new-acquisitions">Novas aquisições</label>
+                <label for="new-acquisitions">New acquisitions</label>
 
                 <input type="checkbox" id="data-reports" name="preferences" value="reports">
-                <label for="data-reports">Relatórios de dados</label>
+                <label for="data-reports">Data Reports</label>
             </fieldset>
 
-            <button type="submit">Cadastrar</button>
+            <button type="submit">Register</button>
         </form>
     </div>
 
