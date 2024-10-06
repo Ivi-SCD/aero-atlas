@@ -4,7 +4,6 @@ get_metadata_scenes, download_scene, calculate_and_plot_indices
 from cachetools import TTLCache
 from functools import lru_cache
 from datetime import datetime, timedelta
-import shutil
 import os
 
 api_cache = TTLCache(maxsize=100, ttl=3600)
@@ -33,6 +32,10 @@ def calculate_and_plot_indices_with_cache(display_id):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/analysis')
+def analysis():
+    return render_template('analysis.html')
 
 @app.route("/get-last-scene/", methods=['POST'])
 def get_last_scenes():
@@ -96,9 +99,6 @@ def register():
         'message': f'Registro bem-sucedido! O próximo satélite passará em {next_pass_date.strftime("%Y-%m-%d")}.'
     })
 
-@app.route('/analysis/')
-def analysis():
-    return render_template('analysis.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

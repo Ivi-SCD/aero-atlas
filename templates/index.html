@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Landsat</title>
+    <title>Aero Atlas</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/aeroatlas-logo.png') }}">
 </head>
 <body>
     <header>
-        <h1>Mapa Landsat</h1>
+        <h1>Landsat's Map</h1>
         <nav>
             <a href="#" id="home-link">Map</a>
-            <a href="#" id="analysis-link">Data Analytics</a>
+            <a href="/analysis" id="analysis-link">Data Analytics</a>
         </nav>
     </header>
 
@@ -120,6 +121,9 @@
 
             <label for="email">E-mail:</label>
             <input type="email" id="email" required>
+
+            <label for="telefone">Phone Number:</label>
+            <input type="telefone" id="telefone" required>
 
             <fieldset>
                 <legend>Preferences:</legend>

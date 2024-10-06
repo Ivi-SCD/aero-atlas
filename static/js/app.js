@@ -362,12 +362,6 @@ document.getElementById('home-link').addEventListener('click', function(e) {
     document.getElementById('analysis-container').style.display = 'none';
 });
 
-document.getElementById('analysis-link').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('principal').style.display = 'none';
-    document.getElementById('analysis-container').style.display = 'block';
-});
-
 document.getElementById('registration-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
