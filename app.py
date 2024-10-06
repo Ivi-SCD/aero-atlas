@@ -4,12 +4,42 @@ get_metadata_scenes, download_scene, calculate_and_plot_indices
 from cachetools import TTLCache
 from functools import lru_cache
 from datetime import datetime, timedelta
+import shutil
 import os
 
 api_cache = TTLCache(maxsize=100, ttl=3600)
 index_cache = TTLCache(maxsize=50, ttl=7200)
 
+def cleanup_folders():
+    # Pasta 'data'
+    data_folder = 'data'
+    if os.path.exists(data_folder):
+        for item in os.listdir(data_folder):
+            item_path = os.path.join(data_folder, item)
+            if item != 'README.md':
+                if os.path.isfile(item_path):
+                    os.remove(item_path)
+                elif os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+        print("Pasta 'data' limpa, mantendo README.md")
+    else:
+        print("Pasta 'data' não encontrada")
+
+    # Pasta 'graphs'
+    graphs_folder = 'static/graphs'
+    if os.path.exists(graphs_folder):
+        for item in os.listdir(graphs_folder):
+            item_path = os.path.join(graphs_folder, item)
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+        print("Pasta 'graphs' limpa")
+    else:
+        print("Pasta 'graphs' não encontrada")
+
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
+cleanup_folders()
 
 def get_scenes_with_cache(landsat, level, lat, long, end_date, start_date=None, cloud_cover=None):
     cache_key = f"{landsat}_{level}_{lat}_{long}_{end_date}_{start_date}_{cloud_cover}"
@@ -31,10 +61,12 @@ def calculate_and_plot_indices_with_cache(display_id):
 
 @app.route('/')
 def index():
+    cleanup_folders()
     return render_template('index.html')
 
 @app.route('/analysis')
 def analysis():
+    cleanup_folders()
     return render_template('analysis.html')
 
 @app.route("/get-last-scene/", methods=['POST'])
@@ -98,6 +130,7 @@ def register():
     return jsonify({
         'message': f'Registro bem-sucedido! O próximo satélite passará em {next_pass_date.strftime("%Y-%m-%d")}.'
     })
+
 
 
 if __name__ == '__main__':
