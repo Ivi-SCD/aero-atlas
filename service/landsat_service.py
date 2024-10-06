@@ -4,6 +4,7 @@ import rasterio
 from rembg import remove
 from PIL import Image
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
@@ -54,67 +55,77 @@ def get_corners_from_scene(scene):
     }
 
 
+
 def calculate_and_plot_indices(display_id):
-    """Calcula NDVI, EVI, etc. e salva os gráficos como imagens."""
+    """Calcula NDVI, EVI, SAVI, NDWI, MNDWI, AWEI e salva os gráficos como imagens."""
     scene_path = f'./data/{display_id}'
+    indices = {}
 
-
-    with rasterio.open(f'{scene_path}/{display_id}_B4.TIF') as red, \
-         rasterio.open(f'{scene_path}/{display_id}_B5.TIF') as nir:
-        
-        red_band = red.read(1).astype('float32')
-        nir_band = nir.read(1).astype('float32')
-        
-        
-        denominator = nir_band + red_band
-        ndvi = np.where(denominator == 0, 0, (nir_band - red_band) / denominator)
-
-        
-        plt.style.use('seaborn-v0_8-dark-palette')
-        plt.figure(figsize=(5,5))
-        plt.axis('off')
-        plt.imshow(ndvi, cmap='viridis', vmin=-1, vmax=1)
-        plt.savefig(f'static/graphs/{display_id}_ndvi.png')
-        img = Image.open(f'static/graphs/{display_id}_ndvi.png')
-        remove(img)
-        img.save(f'static/graphs/{display_id}_ndvi.png')
-        
-        plt.close()
-
-
-    C1 = 6.0
-    C2 = 7.5
-    L = 1.0
-
-    with rasterio.open(f'{scene_path}/{display_id}_B4.TIF') as red, \
+    with rasterio.open(f'{scene_path}/{display_id}_B2.TIF') as blue, \
+         rasterio.open(f'{scene_path}/{display_id}_B3.TIF') as green, \
+         rasterio.open(f'{scene_path}/{display_id}_B4.TIF') as red, \
          rasterio.open(f'{scene_path}/{display_id}_B5.TIF') as nir, \
-         rasterio.open(f'{scene_path}/{display_id}_B2.TIF') as blue:
+         rasterio.open(f'{scene_path}/{display_id}_B6.TIF') as swir1, \
+         rasterio.open(f'{scene_path}/{display_id}_B7.TIF') as swir2:
+        
+        blue_band = blue.read(1).astype(float)
+        green_band = green.read(1).astype(float)
+        red_band = red.read(1).astype(float)
+        nir_band = nir.read(1).astype(float)
+        swir1_band = swir1.read(1).astype(float)
+        swir2_band = swir2.read(1).astype(float)
 
-        red_band = red.read(1).astype('float32')
-        nir_band = nir.read(1).astype('float32')
-        blue_band = blue.read(1).astype('float32')
+        # NDVI
+        ndvi = (nir_band - red_band) / (nir_band + red_band)
+        indices['ndvi'] = plot_and_save_index(ndvi, 'NDVI', display_id, vmin=-1, vmax=1, 
+                                              cmap=LinearSegmentedColormap.from_list("", ['#FFFFE0', '#00A600']))
 
+        # EVI
+        evi = 2.5 * ((nir_band - red_band) / (nir_band + 6 * red_band - 7.5 * blue_band + 1))
+        indices['evi'] = plot_and_save_index(evi, 'EVI', display_id, vmin=-1, vmax=1, 
+                                             cmap=LinearSegmentedColormap.from_list("", ['#FFFACD', '#006400']))
 
-        denominator = nir_band + C1 * red_band - C2 * blue_band + L
-        evi = np.where(denominator <= 0, 0, 2.5 * ((nir_band - red_band) / denominator))
+        # SAVI
+        L = 0.5
+        savi = ((nir_band - red_band) / (nir_band + red_band + L)) * (1 + L)
+        indices['savi'] = plot_and_save_index(savi, 'SAVI', display_id, vmin=-1, vmax=1, 
+                                              cmap=LinearSegmentedColormap.from_list("", ['#FFB6C1', '#228B22']))
 
-        plt.figure(figsize=(5,5))
-        plt.imshow(evi, cmap='Blues')
-        plt.axis('off')
-        plt.savefig(f'static/graphs/{display_id}_evi.png')
-        img = Image.open(f'static/graphs/{display_id}_evi.png')
-        img_no_bg = remove(img)
-        img_rotated = img_no_bg.rotate(12.5, expand=True)
-        img_rotated.save(f'static/graphs/{display_id}_evi.png')
+        # NDWI
+        ndwi = (green_band - nir_band) / (green_band + nir_band)
+        indices['ndwi'] = plot_and_save_index(ndwi, 'NDWI', display_id, vmin=-1, vmax=1, 
+                                              cmap='RdYlBu')
 
-        plt.close()
+        # MNDWI
+        mndwi = (green_band - swir1_band) / (green_band + swir1_band)
+        indices['mndwi'] = plot_and_save_index(mndwi, 'MNDWI', display_id, vmin=-1, vmax=1, 
+                                               cmap='coolwarm')
 
+        # AWEI
+        awei = 4 * (green_band - swir1_band) - (0.25 * nir_band + 2.75 * swir2_band)
+        indices['awei'] = plot_and_save_index(awei, 'AWEI', display_id, 
+                                              vmin=np.percentile(awei, 2), vmax=np.percentile(awei, 98), 
+                                              cmap='viridis')
 
-    return {
-        'ndvi': f'static/graphs/{display_id}_ndvi.png',
-        'evi': f'static/graphs/{display_id}_evi.png',
-    }
+    return indices
 
+def plot_and_save_index(index, index_name, display_id, vmin, vmax, cmap):
+    plt.figure(figsize=(8, 8))
+    plt.imshow(index, cmap=cmap, vmin=vmin, vmax=vmax)
+    plt.colorbar(label=index_name)
+    plt.title(index_name)
+    plt.axis('off')
+    save_path = f'static/graphs/{display_id}_{index_name.lower()}.png'
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+    img = Image.open(save_path)
+    img = remove(img)
+    img.save(save_path)
+
+    return f'/static/graphs/{display_id}_{index_name.lower()}.png'
+
+    
 def download_scene(display_id):
     ee = EarthExplorer(USERNAME, PASSWORD)
 

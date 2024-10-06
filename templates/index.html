@@ -1,148 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa Landsat</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 </head>
-
 <body>
     <header>
         <h1>Mapa Landsat</h1>
         <nav>
-            <a href="#">Página Atual</a>
-            <a href="#">Análise Dados Landsat</a>
+            <a href="#" id="home-link">Página Atual</a>
+            <a href="#" id="analysis-link">Análise de Dados</a>
         </nav>
     </header>
-    
-    <div id="loading-indicator">Carregando...</div>    
+
+    <div id="loading-indicator">Carregando...</div>
+
     <div id="principal">
         <div id="map"></div>
-        <div id="form-container">
-            <form id="landsat-form">
-                <label for="landsat">Landsat:</label>
-                <select id="landsat" name="landsat">
-                    <option value="L9">Landsat 9</option>
-                    <option value="L8">Landsat 8</option>
-                    <option value="L7">Landsat 7</option>
-                    <option value="L5">Landsat 5</option>
-                </select>
-                <br>
-                <label for="category-select">Category:</label>
-                <select id="category-select" name="category">
-                    <option value="All">All</option>
-                    <option value="Agriculture">Agriculture</option>
-                    <option value="Hidrology">Hidrology</option>
-                    <option value="Temperature & Climate">Temperature & Climate</option>
-                </select>
-                <label for="level">Level:</label>
-                <select id="level" name="level">
-                    <option value="1">Level 1</option>
-                    <option value="2">Level 2</option>
-                </select>
-                <br>
+        <div id="sidebar">
+            <div id="form-container">
+                <form id="landsat-form">
+                    <label for="landsat">Landsat:</label>
+                    <select id="landsat" required>
+                        <option value="L9">Landsat 9</option>
+                        <option value="L8">Landsat 8</option>
+                        <option value="L7">Landsat 7</option>
+                        <option value="L5">Landsat 5</option>
+                    </select>
 
-                <label for="lat">Latitude:</label>
-                <input type="number" id="lat" name="lat" step="any" required>
-                <br>
+                    <label for="level">Level:</label>
+                    <select id="level" required>
+                        <option value="1">Level 1</option>
+                        <option value="2">Level 2</option>
+                    </select>
 
-                <label for="long">Longitude:</label>
-                <input type="number" id="long" name="long" step="any" required>
-                <br>
+                    <label for="indicator">Indicator:</label>
+                    <select id="indicator" required>
+                        <option value="ndvi">NDVI</option>
+                        <option value="evi">EVI</option>
+                        <option value="savi">SAVI</option>
+                        <option value="ndwi">NDWI</option>
+                        <option value="mndwi">MNDWI</option>
+                        <option value="awei">AWEI</option>
+                    </select>
 
-                <label for="start_date">Data de Início:</label>
-                <input type="date" id="start_date" name="start_date">
-                <br>
+                    <label for="lat">Latitude:</label>
+                    <input type="number" id="lat" step="0.000000000000001" required>
 
-                <label for="end_date">Data de Fim:</label>
-                <input type="date" id="end_date" name="end_date" required>
-                <br>
+                    <label for="long">Longitude:</label>
+                    <input type="number" id="long" step="0.000000000000001" required>
 
-                <label for="cloud_cover">Cobertura de Nuvens (%):</label>
-                <input type="number" id="cloud_cover" name="cloud_cover" min="0" max="100">
-                <br>
+                    <label for="start_date">Data de Início:</label>
+                    <input type="date" id="start_date">
 
-                <button type="submit">Buscar Cena</button>
-            </form>
+                    <label for="end_date">Data de Fim:</label>
+                    <input type="date" id="end_date" required>
 
+                    <label for="cloud_cover">Cobertura de Nuvens (%):</label>
+                    <input type="number" id="cloud_cover" min="0" max="100">
+
+                    <button type="submit">Buscar Cena</button>
+                </form>
+            </div>
             <div id="scene-select"></div>
+            <div id="index-info"></div>
         </div>
     </div>
-    <div>
-        <h1>Checkboxes</h1>
 
-        <div id="ndvi">
-            <label for="ndvi">
-                <input type="checkbox" id="ndvi-checkbox" name="ndvi-option" value="ndvi">
-                NDVI
-            </label>
-            <br>
-        </div>
-
-        <div id="evi">
-            <label for="evi">
-                <input type="checkbox" id="evi-checkbox" name="evi-option" value="evi">
-                EVI
-            </label>
-            <br>
-        </div>
-
-        <div id="savi">
-            <label for="savi">
-                <input type="checkbox" id="savi-checkbox" name="savi-option" value="savi">
-                SAVI
-            </label>
-            <br>
-        </div>
-
-        <div id="ndwi">
-            <label for="ndwi">
-                <input type="checkbox" id="ndwi-checkbox" name="ndwi-option" value="ndwi">
-                NDWI
-            </label>
-            <br>
-        </div>
-
-        <div id="mndwi">
-            <label for="mndwi">
-                <input type="checkbox" id="mndwi-checkbox" name="mndwi-option" value="mndwi">
-                MNDWI
-            </label>
-            <br>
-        </div>
-
-        <div id="awei">
-            <label for="awei">
-                <input type="checkbox" id="awei-checkbox" name="awei-option" value="awei">
-                AWEI
-            </label>
-            <br>
-        </div>
-
-        <div id="lsr">
-            <label for="lsr">
-                <input type="checkbox" id="lsr-checkbox" name="lsr-option" value="lsr">
-                LSR
-            </label>
-            <br>
-        </div>
-        
-        <div id="bt">
-            <label for="bt">
-                <input type="checkbox" id="bt-checkbox" name="bt-option" value="bt">
-                BT  
-            </label>
-        </div>
-        
-        <br>
+    <div id="analysis-container" style="display: none;">
+        <h2>Análise de Dados</h2>
+        <!-- Content for data analysis will be added here -->
     </div>
 
-    <div id="graph-container"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <div id="registration-container">
+        <h2>Cadastro para Receber Atualizações</h2>
+        <form id="registration-form">
+            <label for="category-select">Category:</label>
+            <select id="category-select" onchange="updateInfo()">
+                <option value="All">All</option>
+                <option value="Agriculture">Agriculture</option>
+                <option value="Hidrology">Hidrology</option>
+            </select>
+
+            <div id="ndvi">
+                <input type="checkbox" id="ndvi-checkbox">
+                <label for="ndvi-checkbox">NDVI</label>
+            </div>
+
+            <div id="evi">
+                <input type="checkbox" id="evi-checkbox">
+                <label for="evi-checkbox">EVI</label>
+            </div>
+
+            <div id="savi">
+                <input type="checkbox" id="savi-checkbox">
+                <label for="savi-checkbox">SAVI</label>
+            </div>
+
+            <div id="ndwi">
+                <input type="checkbox" id="ndwi-checkbox">
+                <label for="ndwi-checkbox">NDWI</label>
+            </div>
+
+            <div id="mndwi">
+                <input type="checkbox" id="mndwi-checkbox">
+                <label for="mndwi-checkbox">MNDWI</label>
+            </div>
+
+            <div id="awei">
+                <input type="checkbox" id="awei-checkbox">
+                <label for="awei-checkbox">AWEI</label>
+            </div>
+
+            <label for="name">Nome:</label>
+            <input type="text" id="name" required>
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" required>
+
+            <fieldset>
+                <legend>Preferências:</legend>
+                <input type="checkbox" id="all-updates" name="preferences" value="all">
+                <label for="all-updates">Todas as atualizações</label>
+
+                <input type="checkbox" id="new-acquisitions" name="preferences" value="new">
+                <label for="new-acquisitions">Novas aquisições</label>
+
+                <input type="checkbox" id="data-reports" name="preferences" value="reports">
+                <label for="data-reports">Relatórios de dados</label>
+            </fieldset>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
-
 </html>
+

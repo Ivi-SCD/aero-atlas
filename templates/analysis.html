@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Dados Landsat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body class="analysis-page">
+    <header>
+        <h1>Análise de Dados Landsat</h1>
+        <nav>
+            <a href="/">Voltar para o Mapa</a>
+        </nav>
+    </header>
+
+    <main class="analysis-content">
+        <section class="analysis-section">
+            <h2>Construção da Ferramenta</h2>
+            <p>Nossa ferramenta foi desenvolvida utilizando Python no backend e JavaScript no frontend. Utilizamos a biblioteca Flask para criar nossa API RESTful e Leaflet.js para renderizar os mapas interativos.</p>
+        </section>
+
+        <section class="analysis-section">
+            <h2>Cálculos Utilizados</h2>
+            <h3>NDVI (Índice de Vegetação por Diferença Normalizada)</h3>
+            <p>NDVI = (NIR - RED) / (NIR + RED)</p>
+            <p>Onde NIR é a banda do infravermelho próximo e RED é a banda do vermelho.</p>
+
+            <h3>EVI (Índice de Vegetação Melhorado)</h3>
+            <p>EVI = 2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))</p>
+            <p>Onde BLUE é a banda do azul.</p>
+
+            <h3>SAVI (Índice de Vegetação Ajustado ao Solo)</h3>
+            <p>SAVI = ((NIR - RED) / (NIR + RED + L)) * (1 + L)</p>
+            <p>Onde L é um fator de ajuste do solo, geralmente 0.5.</p>
+
+            <h3>NDWI (Índice de Água por Diferença Normalizada)</h3>
+            <p>NDWI = (GREEN - NIR) / (GREEN + NIR)</p>
+            <p>Onde GREEN é a banda do verde.</p>
+
+            <h3>MNDWI (Índice de Água por Diferença Normalizada Modificado)</h3>
+            <p>MNDWI = (GREEN - SWIR) / (GREEN + SWIR)</p>
+            <p>Onde SWIR é a banda do infravermelho de ondas curtas.</p>
+
+            <h3>AWEI (Índice de Extração de Água Automatizado)</h3>
+            <p>AWEI = 4 * (GREEN - SWIR) - (0.25 * NIR + 2.75 * SWIR)</p>
+        </section>
+
+        <section class="analysis-section">
+            <h2>Curiosidades Científicas</h2>
+            <ul>
+                <li>O satélite Landsat 8 orbita a Terra a cada 99 minutos, completando 14 órbitas por dia.</li>
+                <li>Cada cena Landsat cobre uma área de aproximadamente 185 km x 180 km.</li>
+                <li>O programa Landsat é o programa de observação da Terra mais longo da história, com mais de 40 anos de dados contínuos.</li>
+                <li>As imagens Landsat são usadas em diversos campos, desde agricultura até estudos de mudanças climáticas.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Mapa Landsat. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

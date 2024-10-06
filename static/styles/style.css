@@ -1,23 +1,26 @@
 body {
-    font-family: Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #121212;
     color: #ffffff;
-    font-size: 0.875em;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
 header {
     background-color: #4a148c;
-    padding: 0.625em 1.25em;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
     margin: 0;
-    font-size: 1.5em;
+    font-size: 1.8rem;
+    font-weight: 600;
 }
 
 nav {
@@ -27,35 +30,40 @@ nav {
 nav a {
     color: #ffffff;
     text-decoration: none;
-    margin-left: 1.25em;
-    font-weight: bold;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
 nav a:hover {
-    text-decoration: underline;
+    color: #b39ddb;
 }
 
 #principal {
     display: flex;
-    height: 100%;
+    height: calc(100vh - 60px);
     flex-direction: row;
-    align-items: center;
-    padding: 1.25em;
 }
 
 #map {
-    height: 100vh;
-    width: 100%;
-    border: 0.125em solid #4a148c;
+    flex: 2;
+    height: 100%;
+    border: 2px solid #4a148c;
+}
+
+#sidebar {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: #1e1e1e;
 }
 
 #form-container {
-    background-color: #1e1e1e;
-    padding: 1.25em;
-    border-radius: 0.3125em;
-    width: auto;
-    margin: 1.25em;
-    box-shadow: 0 0.125em 0.625em rgba(0, 0, 0, 0.5);
+    background-color: #2d2d2d;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 form {
@@ -64,14 +72,18 @@ form {
 }
 
 label {
-    margin-bottom: 0.3125em;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
 }
 
 input, select, button {
-    margin-bottom: 0.9375em;
-    padding: 0.625em;
-    border: 0.125em solid #4a148c;
-    border-radius: 0.3125em;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border: 2px solid #4a148c;
+    border-radius: 4px;
+    background-color: #3d3d3d;
+    color: #ffffff;
+    font-size: 1rem;
 }
 
 button {
@@ -79,44 +91,95 @@ button {
     color: #ffffff;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-weight: 600;
 }
 
 button:hover {
     background-color: #6a1b9a;
 }
 
-#ndvi, #evi, #brightness-temp, #ndwi {
-    margin-top: 1.25em;
-    padding: 1.25em;
-    background-color: #1e1e1e;
-    border-radius: 1em;
-    box-shadow: 0 0.125em 0.625em rgba(0, 0, 0, 0.5);
-}
-
-#ndvi img, #evi img, #brightness-temp img, #ndwi img {
-    max-width: 100%;
-    border: 0.125em solid #4a148c;
-    border-radius: 0.3125em;
+#index-info {
+    background-color: #2d2d2d;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 #loading-indicator {
     display: none;
     position: fixed;
-    top: 1.25em;
+    top: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 0.625em;
-    border: 0.0625em solid #ccc;
-    border-radius: 0.3125em;
+    background-color: #4a148c;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 1000;
 }
 
-#savi-checkbox, #ndvi, #evi,
-#ndwi, #mndwi, #awei, #lsr, #bt, #savi,
-#ndwi-checkbox, #evi-checkbox,
- #ndvi-checkbox, #mndwi-checkbox, #awei-checkbox, 
- #lsr-checkbox, #bt-checkbox {
-    visibility: hidden;
-    display: none;
+/* Analysis page styles */
+.analysis-page {
+    background-color: #1e1e1e;
+}
+
+.analysis-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.analysis-section {
+    background-color: #2d2d2d;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.analysis-section h2 {
+    color: #b39ddb;
+    border-bottom: 2px solid #4a148c;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.analysis-section h3 {
+    color: #9575cd;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.analysis-section p {
+    margin-bottom: 1rem;
+}
+
+.analysis-section ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.analysis-section li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.analysis-section li::before {
+    content: "•";
+    color: #4a148c;
+    font-size: 1.2rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+footer {
+    background-color: #4a148c;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
 }
